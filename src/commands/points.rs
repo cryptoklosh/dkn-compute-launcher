@@ -1,5 +1,6 @@
 use colored::Colorize;
 use eyre::Context;
+use std::fs;
 
 use crate::utils::{get_network_env, DriaEnv, LAUNCHER_USER_AGENT};
 
@@ -42,6 +43,7 @@ pub async fn show_points() -> eyre::Result<()> {
             "$DRIA points".purple(),
             points.percentile
         );
+        fs::write("/etc/out/points_score", points.score.to_string()).expect("Should be able to write to `/etc/out/points_score`");
     }
 
     Ok(())
