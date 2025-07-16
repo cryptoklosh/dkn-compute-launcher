@@ -15,7 +15,7 @@ pub async fn handle_referrals() -> eyre::Result<()> {
     dria_env.ask_for_key_if_required()?;
     let (sk, _, addr) = dria_env.get_account()?;
 
-    loop {
+    // loop {
         // let Selectable::Some(choice) = Select::new(
         //     "Choose a command below:",
         //     Selectable::new(vec![
@@ -120,7 +120,7 @@ Use my referral code {} to get started: https://dria.co/join"#,
                 }
             }
         }
-    }
+    // }
 
     Ok(())
 }
