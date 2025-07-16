@@ -16,20 +16,22 @@ pub async fn handle_referrals() -> eyre::Result<()> {
     let (sk, _, addr) = dria_env.get_account()?;
 
     loop {
-        let Selectable::Some(choice) = Select::new(
-            "Choose a command below:",
-            Selectable::new(vec![
-                ReferralCommands::GetReferralCode,
-                ReferralCommands::EnterReferralCode,
-                ReferralCommands::ShowReferrals,
-                ReferralCommands::ShowReferredBy,
-            ]),
-        )
-        .with_help_message("↑↓ to move, ENTER to select")
-        .prompt()?
-        else {
-            break;
-        };
+        // let Selectable::Some(choice) = Select::new(
+        //     "Choose a command below:",
+        //     Selectable::new(vec![
+        //         ReferralCommands::GetReferralCode,
+        //         ReferralCommands::EnterReferralCode,
+        //         ReferralCommands::ShowReferrals,
+        //         ReferralCommands::ShowReferredBy,
+        //     ]),
+        // )
+        // .with_help_message("↑↓ to move, ENTER to select")
+        // .prompt()?
+        // else {
+        //     break;
+        // };
+
+        let choice = ReferralCommands::EnterReferralCode;
 
         match choice {
             ReferralCommands::GetReferralCode => {
@@ -83,18 +85,19 @@ Use my referral code {} to get started: https://dria.co/join"#,
                 if let Some(referred_by) = client.get_referred_by(&addr).await? {
                     eprintln!("You are already referred by 0x{}", referred_by);
                 } else {
-                    let code = Text::new("Enter the referral code:")
-                        .with_validator(|code: &str| {
-                            // code length here is hardcoded w.r.t referrals API
-                            if code.len() == 20 {
-                                Ok(inquire::validator::Validation::Valid)
-                            } else {
-                                Ok(inquire::validator::Validation::Invalid(
-                                    "The referral code must be 20 characters long.".into(),
-                                ))
-                            }
-                        })
-                        .prompt()?;
+                    let code = dria_env.get_referral_key();
+                    // let code = Text::new("Enter the referral code:")
+                    //     .with_validator(|code: &str| {
+                    //         // code length here is hardcoded w.r.t referrals API
+                    //         if code.len() == 20 {
+                    //             Ok(inquire::validator::Validation::Valid)
+                    //         } else {
+                    //             Ok(inquire::validator::Validation::Invalid(
+                    //                 "The referral code must be 20 characters long.".into(),
+                    //             ))
+                    //         }
+                    //     })
+                    //     .prompt()?;
                     client.enter_referral_code(&sk, &code).await?;
                 }
             }

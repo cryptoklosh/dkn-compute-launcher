@@ -39,8 +39,11 @@ impl DriaEnv {
     pub const SERPER_APIKEY_KEY: &'static str = "SERPER_API_KEY";
     pub const JINA_APIKEY_KEY: &'static str = "JINA_API_KEY";
 
+    // referral
+    pub const REFERRAL_KEY: &'static str = "DRIA_REFERRAL_KEY";
+
     /// All environment keys that we are interested in.
-    pub const KEY_NAMES: [&str; 13] = [
+    pub const KEY_NAMES: [&str; 14] = [
         // log level
         Self::LOG_LEVEL_KEY,
         // DKN
@@ -58,6 +61,9 @@ impl DriaEnv {
         Self::OLLAMA_HOST_KEY,
         Self::OLLAMA_PORT_KEY,
         Self::OLLAMA_AUTO_PULL_KEY,
+
+        // Referral
+        Self::REFERRAL_KEY,
     ];
 
     /// Check if the environment has been changed.
@@ -204,6 +210,13 @@ impl DriaEnv {
             .ok_or_eyre("No wallet secret key found.")?;
 
         secret_key_to_account(secret_key)
+    }
+
+    #[inline]
+    pub fn get_referral_key(
+        &self,
+    ) -> &str {
+        return self.get(Self::REFERRAL_KEY).unwrap();
     }
 }
 
