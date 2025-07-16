@@ -19,14 +19,9 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
     cargo build --release
 
 # copy release binary to distroless
-# FROM debian:12
-# WORKDIR /root
-# RUN apt-get update && apt-get install -y curl ca-certificates 
-# COPY --from=builder /usr/src/app/target/release/dkn-compute /root/dkn-compute
+FROM debian:12
+WORKDIR /root
+RUN apt-get update && apt-get install -y curl ca-certificates 
+COPY --from=builder /usr/src/app/target/release/dkn-compute-launcher /root/dkn-compute-launcher
 
-# COPY entrypoint.sh /root/entrypoint.sh
-# RUN chmod +x /root/entrypoint.sh
-
-# EXPOSE 8080
-
-# ENTRYPOINT [ "/root/entrypoint.sh" ]
+ENTRYPOINT [ "/root/dkn-compute-launcher" ]
